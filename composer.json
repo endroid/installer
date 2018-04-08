@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "composer-plugin-api": "^1.1"
     },
     "require-dev": {
         "composer/composer": "^1.0"
