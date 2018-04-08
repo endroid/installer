@@ -12,13 +12,14 @@ namespace Endroid\Installer;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
-use Composer\Plugin\CommandEvent;
 use Composer\Plugin\PluginInterface;
 use Composer\Util\Filesystem;
 
 final class Installer implements PluginInterface, EventSubscriberInterface
 {
+    /** @var Composer */
     private $composer;
+
     private $io;
     private $filesystem;
 
@@ -32,23 +33,51 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'post-install-cmd' => 'onPostInstallCmd',
-            'post-update-cmd' => 'onPostUpdateCmd',
+            'post-install-cmd' => 'install',
+            'post-update-cmd' => 'install',
         ];
     }
 
-    public function onPostInstallCmd(CommandEvent $event): void
+    public function install(): void
     {
-        $this->install($event);
+        $projectType = $this->composer->getPackage()->getExtra()['endroid']['project-type'] ?? false;
+
+        if ($projectType === false) {
+            return;
+        }
+
+        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getPackages();
+        foreach ($packages as $package) {
+            $packagePath = $this->composer->getInstallationManager()->getInstallPath($package);
+            $sourcePath = $packagePath.'/.install/'.$projectType;
+            if (file_exists($sourcePath)) {
+                $this->copy($sourcePath, getcwd());
+            }
+        }
     }
 
-    public function onPostUpdateCmd(CommandEvent $event): void
+    private function copy(string $sourcePath, string $targetPath): void
     {
-        $this->install($event);
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $item) {
+            $target = $targetPath.DIRECTORY_SEPARATOR.$iterator->getSubPathName();
+            if ($item->isDir()) {
+                if (!is_dir($target)) {
+                    mkdir($target);
+                }
+            } elseif (!file_exists($target)) {
+                $this->copyFile($item, $target);
+            }
+        }
     }
 
-    private function install(CommandEvent $event): void
+    public function copyFile(string $source, string $target)
     {
-        die('f');
+        if (file_exists($target)) {
+            return;
+        }
+
+        copy($source, $target);
+        @chmod($target, fileperms($target) | (fileperms($source) & 0111));
     }
 }
