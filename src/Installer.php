@@ -13,21 +13,26 @@ use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use Composer\Util\Filesystem;
 
 final class Installer implements PluginInterface, EventSubscriberInterface
 {
-    /** @var Composer */
     private $composer;
-
     private $io;
-    private $filesystem;
 
-    public function activate(Composer $composer, IOInterface $io)
+
+    private $projectTypes = [
+        'symfony' => [
+            'src/Kernel.php',
+            'config/packages',
+            'config/routes',
+            'public',
+        ],
+    ];
+
+    public function activate(Composer $composer, IOInterface $io): void
     {
         $this->composer = $composer;
         $this->io = $io;
-        $this->filesystem = new Filesystem();
     }
 
     public static function getSubscribedEvents(): array
@@ -40,20 +45,59 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 
     public function install(): void
     {
-        $projectType = $this->composer->getPackage()->getExtra()['endroid']['project-type'] ?? false;
+        $enabled = $this->composer->getPackage()->getExtra()['endroid']['installer']['enabled'] ?? true;
+        $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
-        if ($projectType === false) {
+        if (!$enabled) {
             return;
         }
 
+        $projectType = $this->detectProjectType();
+
+        if ($projectType === null) {
+            return;
+        }
+
+        $processedPackages = [];
+        $this->io->write('<info>Endroid Installer detected project type "'.$projectType.'"</>');
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getPackages();
+
         foreach ($packages as $package) {
+
+            // Avoid handling duplicates: getPackages sometimes returns duplicates
+            if (in_array($package->getName(), $processedPackages)) {
+                continue;
+            }
+            $processedPackages[] = $package->getName();
+
+            // Skip excluded packages
+            if (in_array($package->getName(), $exclude)) {
+                $this->io->write('- Skipping <info>'.$package->getName().'</>');
+                continue;
+            }
+
+            // Check for installation files and install
             $packagePath = $this->composer->getInstallationManager()->getInstallPath($package);
-            $sourcePath = $packagePath.'/.install/'.$projectType;
+            $sourcePath = $packagePath.DIRECTORY_SEPARATOR.'.install'.DIRECTORY_SEPARATOR.$projectType;
             if (file_exists($sourcePath)) {
+                $this->io->write('- Configuring <info>'.$package->getName().'</>');
                 $this->copy($sourcePath, getcwd());
             }
         }
+    }
+
+    private function detectProjectType()
+    {
+        foreach ($this->projectTypes as $projectType => $paths) {
+            foreach ($paths as $path) {
+                if (!file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
+                    continue 2;
+                }
+            }
+            return $projectType;
+        }
+
+        return null;
     }
 
     private function copy(string $sourcePath, string $targetPath): void
