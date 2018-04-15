@@ -11,7 +11,23 @@ Composer plugin for installing configuration files.
 
 ## Installation
 
+``` bash
+$ composer require endroid/installer
+```
+
 ## Usage
+
+Add the configuration files you want to be copied upon installation.
+
+```
+.install
+    symfony
+        config
+            packages
+                package_name.yaml
+            routes
+                package_name.yaml
+```
 
 ## Versioning
 
