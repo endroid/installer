@@ -7,7 +7,9 @@
 [![Total Downloads](http://img.shields.io/packagist/dt/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
 [![License](http://img.shields.io/packagist/l/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
 
-Composer plugin for installing configuration files.
+Composer plugin for installing configuration files. The installer automatically
+detects the project type in which your library is installed and installs the
+corresponding configuration files upon composer require, update or install.
 
 ## Installation
 
