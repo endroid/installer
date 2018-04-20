@@ -31,6 +31,26 @@ Add the configuration files you want to be copied upon installation.
                 package_name.yaml
 ```
 
+## Configuration
+
+Generally you want the files to be installed automatically but if you
+experience issues with the installer or just don't want some package to be
+auto installed you can specify this via your composer.json.
+
+```
+"extra": {
+    "endroid": {
+        "installer": {
+            "enabled": false,
+            "exclude": [
+                "endroid/asset",
+                "endroid/embed"
+            ]
+        }
+    }
+}
+```
+
 ## Versioning
 
 Version numbers follow the MAJOR.MINOR.PATCH scheme. Backwards compatible
