@@ -9,7 +9,10 @@
 
 Composer plugin for installing configuration files. The installer automatically
 detects the project type in which your library is installed and installs the
-corresponding configuration files upon composer require, update or install.
+corresponding configuration files from your package.
+
+Read the [blog](https://medium.com/@endroid/auto-package-configuration-for-symfony-e14780e29d81)
+for more information on why I created this plugin.
 
 ## Installation
 
