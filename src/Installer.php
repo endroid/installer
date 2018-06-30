@@ -19,7 +19,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     private $composer;
     private $io;
 
-
     private $projectTypes = [
         'symfony' => [
             'src/Kernel.php',
@@ -49,12 +48,14 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
         if (!$enabled) {
+            $this->io->write('<info>Endroid Installer disabled</>');
             return;
         }
 
         $projectType = $this->detectProjectType();
 
         if ($projectType === null) {
+            $this->io->write('<info>Endroid Installer did not detect a compatible project type</>');
             return;
         }
 
