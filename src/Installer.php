@@ -37,8 +37,8 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'post-install-cmd' => ['install', PHP_INT_MAX],
-            'post-update-cmd' => ['install', PHP_INT_MAX],
+            'post-install-cmd' => ['install', -1],
+            'post-update-cmd' => ['install', -1],
         ];
     }
 
