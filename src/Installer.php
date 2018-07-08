@@ -13,6 +13,7 @@ use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\ScriptEvents;
 
 final class Installer implements PluginInterface, EventSubscriberInterface
 {
@@ -23,7 +24,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         'symfony' => [
             'src/Kernel.php',
             'config/packages',
-            'config/routes',
             'public',
         ],
     ];
@@ -37,8 +37,8 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'post-install-cmd' => ['install', 1],
-            'post-update-cmd' => ['install', 1],
+            ScriptEvents::POST_INSTALL_CMD => ['install', 1],
+            ScriptEvents::POST_UPDATE_CMD => ['install', 1],
         ];
     }
 
@@ -48,7 +48,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
         if (!$enabled) {
-            $this->io->write('<info>Endroid Installer disabled</>');
+            $this->io->write('<info>Endroid Installer was disabled</>');
             return;
         }
 
@@ -116,7 +116,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    public function copyFile(string $source, string $target)
+    public function copyFile(string $source, string $target): void
     {
         if (file_exists($target)) {
             return;
