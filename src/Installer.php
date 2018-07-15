@@ -48,13 +48,15 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 
         if (!$enabled) {
             $this->io->write('<info>Endroid Installer was disabled</>');
+
             return;
         }
 
         $projectType = $this->detectProjectType();
 
-        if ($projectType === null) {
+        if (null === $projectType) {
             $this->io->write('<info>Endroid Installer did not detect a compatible project type</>');
+
             return;
         }
 
@@ -63,7 +65,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getPackages();
 
         foreach ($packages as $package) {
-
             // Avoid handling duplicates: getPackages sometimes returns duplicates
             if (in_array($package->getName(), $processedPackages)) {
                 continue;
@@ -94,6 +95,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
                     continue 2;
                 }
             }
+
             return $projectType;
         }
 
