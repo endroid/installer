@@ -22,7 +22,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 
     private $projectTypes = [
         'symfony' => [
-            'src/Kernel.php',
             'config/packages',
             'public',
         ],
