@@ -55,7 +55,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         $projectType = $this->detectProjectType();
 
         if (null === $projectType) {
-            $this->io->write('<info>Endroid Installer did not detect a compatible project type</>');
+            $this->io->write('<info>Endroid Installer did not detect a compatible project type for auto-configuration</>');
 
             return;
         }
