@@ -81,8 +81,10 @@ final class Installer implements PluginInterface, EventSubscriberInterface
             $packagePath = $this->composer->getInstallationManager()->getInstallPath($package);
             $sourcePath = $packagePath.DIRECTORY_SEPARATOR.'.install'.DIRECTORY_SEPARATOR.$projectType;
             if (file_exists($sourcePath)) {
-                $this->io->write('- Configuring <info>'.$package->getName().'</>');
-                $this->copy($sourcePath, getcwd());
+                $changed = $this->copy($sourcePath, getcwd());
+                if ($changed) {
+                    $this->io->write('- Configured <info>'.$package->getName().'</>');
+                }
             }
         }
     }
@@ -102,8 +104,10 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         return null;
     }
 
-    private function copy(string $sourcePath, string $targetPath): void
+    private function copy(string $sourcePath, string $targetPath): bool
     {
+        $changed = false;
+        
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $item) {
             $target = $targetPath.DIRECTORY_SEPARATOR.$iterator->getSubPathName();
@@ -113,8 +117,11 @@ final class Installer implements PluginInterface, EventSubscriberInterface
                 }
             } elseif (!file_exists($target)) {
                 $this->copyFile($item, $target);
+                $changed = true;
             }
         }
+
+        return $changed;
     }
 
     public function copyFile(string $source, string $target): void
