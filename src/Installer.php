@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * (c) Jeroen van den Enden <info@endroid.nl>
  *
@@ -107,7 +109,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     private function copy(string $sourcePath, string $targetPath): bool
     {
         $changed = false;
-        
+
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcePath, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $item) {
             $target = $targetPath.DIRECTORY_SEPARATOR.$iterator->getSubPathName();
