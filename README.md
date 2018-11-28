@@ -5,6 +5,7 @@
 [![Latest Stable Version](http://img.shields.io/packagist/v/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
 [![Build Status](http://img.shields.io/travis/endroid/installer.svg)](http://travis-ci.org/endroid/installer)
 [![Total Downloads](http://img.shields.io/packagist/dt/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
+[![Monthly Downloads](http://img.shields.io/packagist/dm/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
 [![License](http://img.shields.io/packagist/l/endroid/installer.svg)](https://packagist.org/packages/endroid/installer)
 
 Composer plugin for installing configuration files. The installer automatically
