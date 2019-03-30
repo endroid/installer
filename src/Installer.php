@@ -23,6 +23,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     private $io;
 
     private $projectTypes = [
+        'always' => [],
         'symfony' => [
             'config/packages',
             'public',
@@ -45,7 +46,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     public function install(): void
     {
         $enabled = $this->composer->getPackage()->getExtra()['endroid']['installer']['enabled'] ?? true;
-        $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
         if (!$enabled) {
             $this->io->write('<info>Endroid Installer was disabled</>');
@@ -53,13 +53,35 @@ final class Installer implements PluginInterface, EventSubscriberInterface
             return;
         }
 
-        $projectType = $this->detectProjectType();
+        $foundCompabibleProjectType = false;
+        foreach ($this->projectTypes as $projectType => $paths) {
+            if ($this->isCompatibleProjectType($paths)) {
+                $foundCompabibleProjectType = true;
+                $this->installProjectType($projectType);
+            }
+        }
 
-        if (null === $projectType) {
+        if (!$foundCompabibleProjectType) {
             $this->io->write('<info>Endroid Installer did not detect a compatible project type for auto-configuration</>');
 
             return;
         }
+    }
+
+    private function isCompatibleProjectType(array $paths): bool
+    {
+        foreach ($paths as $path) {
+            if (!file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function installProjectType(string $projectType): void
+    {
+        $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
         $processedPackages = [];
         $this->io->write('<info>Endroid Installer detected project type "'.$projectType.'"</>');
@@ -88,21 +110,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
                 }
             }
         }
-    }
-
-    private function detectProjectType()
-    {
-        foreach ($this->projectTypes as $projectType => $paths) {
-            foreach ($paths as $path) {
-                if (!file_exists(getcwd().DIRECTORY_SEPARATOR.$path)) {
-                    continue 2;
-                }
-            }
-
-            return $projectType;
-        }
-
-        return null;
     }
 
     private function copy(string $sourcePath, string $targetPath): bool
