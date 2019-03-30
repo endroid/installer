@@ -23,7 +23,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     private $io;
 
     private $projectTypes = [
-        'always' => [],
+        'all' => [],
         'symfony' => [
             'config/packages',
             'public',
