@@ -105,7 +105,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
             $packagePath = $this->composer->getInstallationManager()->getInstallPath($package);
             $sourcePath = $packagePath.DIRECTORY_SEPARATOR.'.install'.DIRECTORY_SEPARATOR.$projectType;
             if (file_exists($sourcePath)) {
-                $changed = $this->copy($sourcePath, getcwd());
+                $changed = $this->copy($sourcePath, (string) getcwd());
                 if ($changed) {
                     $this->io->write('- Configured <info>'.$package->getName().'</>');
                 }

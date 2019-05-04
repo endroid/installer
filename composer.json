@@ -12,6 +12,10 @@
         "php": ">=7.2",
         "composer-plugin-api": "^1.1"
     },
+    "require-dev": {
+        "composer/composer": "^1.8",
+        "endroid/test": "^1.1.4"
+    },
     "autoload": {
         "psr-4": {
             "Endroid\\Installer\\": "src"
