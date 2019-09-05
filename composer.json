@@ -14,7 +14,7 @@
     },
     "require-dev": {
         "composer/composer": "^1.8",
-        "endroid/test": "^1.1.4"
+        "endroid/test": "dev-master"
     },
     "autoload": {
         "psr-4": {
