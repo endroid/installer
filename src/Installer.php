@@ -19,11 +19,13 @@ use Composer\Script\ScriptEvents;
 
 final class Installer implements PluginInterface, EventSubscriberInterface
 {
+    private const PROJECT_TYPE_ALL = 'all';
+
     private $composer;
     private $io;
 
     private $projectTypes = [
-        'all' => [],
+        self::PROJECT_TYPE_ALL => [],
         'symfony' => [
             'config/packages',
             'public',
@@ -54,16 +56,19 @@ final class Installer implements PluginInterface, EventSubscriberInterface
             return;
         }
 
-        $foundCompabibleProjectType = false;
+        $foundCompatibleProjectType = false;
         foreach ($this->projectTypes as $projectType => $paths) {
             if ($this->isCompatibleProjectType($paths)) {
-                $foundCompabibleProjectType = true;
+                if (self::PROJECT_TYPE_ALL !== $projectType) {
+                    $this->io->write('<info>Endroid Installer detected project type "'.$projectType.'"</>');
+                    $foundCompatibleProjectType = true;
+                }
                 $this->installProjectType($projectType);
             }
         }
 
-        if (!$foundCompabibleProjectType) {
-            $this->io->write('<info>Endroid Installer did not detect a compatible project type for auto-configuration</>');
+        if (!$foundCompatibleProjectType) {
+            $this->io->write('<info>Endroid Installer did not detect a specific framework for auto-configuration</>');
 
             return;
         }
@@ -85,7 +90,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         $exclude = $this->composer->getPackage()->getExtra()['endroid']['installer']['exclude'] ?? [];
 
         $processedPackages = [];
-        $this->io->write('<info>Endroid Installer detected project type "'.$projectType.'"</>');
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getPackages();
 
         foreach ($packages as $package) {
