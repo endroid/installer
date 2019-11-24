@@ -41,8 +41,8 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ScriptEvents::POST_INSTALL_CMD => ['install', -1],
-            ScriptEvents::POST_UPDATE_CMD => ['install', -1],
+            ScriptEvents::POST_INSTALL_CMD => ['install', 1],
+            ScriptEvents::POST_UPDATE_CMD => ['install', 1],
         ];
     }
 
