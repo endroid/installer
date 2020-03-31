@@ -10,12 +10,15 @@
     ],
     "require": {
         "php": ">=7.2",
-        "composer-plugin-api": "^1.1",
-        "roave/security-advisories": "dev-master as 1.0.0"
+        "composer-plugin-api": "^1.1"
     },
     "require-dev": {
         "composer/composer": "^1.8",
         "endroid/test": "dev-master"
+    },
+    "suggest": {
+        "roave/security-advisories": "Avoids installation of package versions with vulnerabilities",
+        "symfony/security-checker": "Checks your composer.lock for vulnerabilities"
     },
     "autoload": {
         "psr-4": {
