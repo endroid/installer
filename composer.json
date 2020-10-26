@@ -1,6 +1,7 @@
 {
     "name": "endroid/installer",
     "type": "composer-plugin",
+    "description": "Composer plugin for installing configuration files"
     "license": "MIT",
     "authors": [
         {
