@@ -21,10 +21,11 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 {
     private const PROJECT_TYPE_ALL = 'all';
 
-    private $composer;
-    private $io;
+    private Composer $composer;
+    private IOInterface $io;
 
-    private $projectTypes = [
+    /** @var array<string, array<string>> */
+    private array $projectTypes = [
         self::PROJECT_TYPE_ALL => [],
         'symfony' => [
             'config/packages',
@@ -46,6 +47,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     {
     }
 
+    /** @return array<string, array<mixed>> */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -82,6 +84,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
         }
     }
 
+    /** @param array<string> $paths */
     private function isCompatibleProjectType(array $paths): bool
     {
         foreach ($paths as $path) {
