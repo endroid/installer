@@ -21,11 +21,14 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 {
     private const PROJECT_TYPE_ALL = 'all';
 
-    private Composer $composer;
-    private IOInterface $io;
+    /** @var Composer */
+    private $composer;
+
+    /** @var IOInterface */
+    private $io;
 
     /** @var array<string, array<string>> */
-    private array $projectTypes = [
+    private $projectTypes = [
         self::PROJECT_TYPE_ALL => [],
         'symfony' => [
             'config/packages',
