@@ -17,6 +17,9 @@
         "composer/composer": "^2.0",
         "endroid/quality": "dev-master"
     },
+    "suggest": {
+        "roave/security-advisories": "Avoids installation of package versions with vulnerabilities"
+    },
     "autoload": {
         "psr-4": {
             "Endroid\\Installer\\": "src"
