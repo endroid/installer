@@ -21,14 +21,11 @@ final class Installer implements PluginInterface, EventSubscriberInterface
 {
     private const PROJECT_TYPE_ALL = 'all';
 
-    /** @var Composer */
-    private $composer;
-
-    /** @var IOInterface */
-    private $io;
+    private Composer $composer;
+    private IOInterface $io;
 
     /** @var array<string, array<string>> */
-    private $projectTypes = [
+    private array $projectTypes = [
         self::PROJECT_TYPE_ALL => [],
         'symfony' => [
             'config/packages',
@@ -50,7 +47,6 @@ final class Installer implements PluginInterface, EventSubscriberInterface
     {
     }
 
-    /** @return array<string, array<mixed>> */
     public static function getSubscribedEvents(): array
     {
         return [
