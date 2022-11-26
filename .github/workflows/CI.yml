@@ -45,6 +45,11 @@ jobs:
           vendor/bin/unit-test
           vendor/bin/functional-test
 
+      - name: Check code quality
+        run: vendor/bin/code-quality
+        env:
+          PHP_CS_FIXER_IGNORE_ENV: 1
+
       - name: Test against lowest versions
         run: |
           composer update --prefer-lowest
@@ -63,8 +68,3 @@ jobs:
         with:
           name: coverage
           path: tests/coverage
-
-      - name: Check code quality
-        run: vendor/bin/code-quality
-        env:
-          PHP_CS_FIXER_IGNORE_ENV: 1
