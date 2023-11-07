@@ -15,7 +15,7 @@
     },
     "require-dev": {
         "composer/composer": "^2.0",
-        "endroid/quality": "dev-master"
+        "endroid/quality": "dev-main"
     },
     "suggest": {
         "roave/security-advisories": "Avoids installation of package versions with vulnerabilities"
