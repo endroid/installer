@@ -18,7 +18,7 @@ for more information on why I created this plugin.
 ## Installation
 
 ``` bash
-$ composer require endroid/installer
+composer require endroid/installer
 ```
 
 ## Usage
