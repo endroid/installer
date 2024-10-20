@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "composer-plugin-api": "^2.0"
     },
     "require-dev": {
