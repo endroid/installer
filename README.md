@@ -45,8 +45,8 @@ the latest default configuration just remove the files locally before update.
 ## Disabling auto installation for a package
 
 Generally you want the files to be installed automatically but if you
-experience issues with the installer or just don't want some package to be
-auto installed you can specify this via your `composer.json`:
+experience issues with the installer or don't want some package to be auto
+installed you can add the package name to the excludes in `composer.json`.
 
 ```
 "extra": {
@@ -61,9 +61,6 @@ auto installed you can specify this via your `composer.json`:
     }
 }
 ```
-
-With the following configuration the files from both [`endroid/asset`](https://github.com/endroid/asset) 
-and [`endroid/embed`](https://github.com/endroid/embed) packages will be excluded.
  
 ## Versioning
 
