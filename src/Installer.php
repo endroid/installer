@@ -93,10 +93,7 @@ final class Installer implements PluginInterface, EventSubscriberInterface
             : [];
 
         $processedPackages = [];
-        $packages = $this->composer
-            ->getRepositoryManager()
-            ->getLocalRepository()
-            ->getPackages();
+        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getPackages();
 
         foreach ($packages as $package) {
             // Avoid handling duplicates: getPackages sometimes returns duplicates
